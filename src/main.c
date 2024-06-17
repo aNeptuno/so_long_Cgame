@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:32:07 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/17 12:47:46 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/06/17 19:29:43 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,24 +73,16 @@ void	open_file(char	*file_path, t_game_data *game_data)
 	return ;
 }
 
-void	validate_map(t_game_data *game_data)
-{
-	if (!validate_map_chars(game_data))
-		return ;
-	get_cols(game_data);
-	get_rows(game_data);
-	if (!game_data->is_map_valid)
-		return ;
-	is_square(game_data);
-	if (game_data->map != NULL)
-		check_limits(game_data, game_data->map);
-}
-
 int	close_window(t_mlx_data *mlx_data)
 {
-	mlx_destroy_window(mlx_data->mlx, mlx_data->window);
+	if (mlx_data->window)
+        mlx_destroy_window(mlx_data->mlx, mlx_data->window);
+    if (mlx_data->mlx)
+        mlx_destroy_display(mlx_data->mlx);
+    free(mlx_data->mlx);
 	ft_putstr("Nooo, you gave up :'c\n");
 	exit(EXIT_SUCCESS);
+	return (0);
 }
 
 int	key_hook_callback(int keycode, t_mlx_data *mlx_data)
@@ -107,10 +99,20 @@ int	key_hook_callback(int keycode, t_mlx_data *mlx_data)
 void	init_mlx(t_mlx_data *mlx_data)
 {
 	mlx_data->mlx = mlx_init();
+	if (mlx_data->mlx == NULL)
+	{
+		perror("Error\nmlx init failed\n");
+		return ;
+	}
 	mlx_data->window = mlx_new_window(mlx_data->mlx, 800, 600, "so_long");
+	if (mlx_data->window == NULL)
+	{
+		mlx_destroy_display(mlx_data->mlx);
+		free(mlx_data->mlx);
+		return ;
+	}
 	mlx_hook(mlx_data->window, 17, 0L, close_window, mlx_data);
 	mlx_key_hook(mlx_data->window, key_hook_callback, mlx_data);
-	mlx_loop(mlx_data->mlx);
 }
 
 int	main(int ac, char **av)
@@ -132,6 +134,9 @@ int	main(int ac, char **av)
 				printf("Cols: %d\n", game_data.cols);
 				printf("Rows: %d\n", game_data.rows);
 				init_mlx(&mlx_data);
+				init_sprites(&game_data, &mlx_data);
+				put_images(&game_data, &mlx_data);
+				mlx_loop(mlx_data.mlx);
 			}
 		}
 	}

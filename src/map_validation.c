@@ -5,126 +5,75 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/14 13:30:05 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/17 10:40:41 by adiban-i         ###   ########.fr       */
+/*   Created: 2024/06/14 13:51:12 by adiban-i          #+#    #+#             */
+/*   Updated: 2024/06/17 18:07:44 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-void	get_cols(t_game_data *game_data)
+static int	is_char_of_map(char c)
 {
-	int		cols;
-	int		found;
-	char	*file;
+	int	is_char;
 
-	file = game_data->file_content;
-	cols = 0;
-	found = 0;
-	while (file[cols] && !found)
-	{
-		cols++;
-		if (file[cols] == '\n')
-			found = 1;
-	}
-	if (cols < 3 || cols > MAX_COLS)
-	{
-		game_data->is_map_valid = 0;
-		return ;
-	}
-	game_data->cols = cols;
-	game_data->is_map_valid = 1;
+	is_char = (c == 'C' || c == 'P' || c == 'E' || c == '\n');
+	return (c == '1' || c == '0' || is_char);
 }
 
-void	get_rows(t_game_data *game_data)
-{
-	int		i;
-	int		rows;
-	char	*file;
-
-	file = game_data->file_content;
-	i = 0;
-	rows = 0;
-	while (file[i])
-	{
-		if (file[i] == '\n')
-			rows++;
-		i++;
-	}
-	rows++;
-	if (rows < 3 || rows > MAX_ROWS)
-	{
-		game_data->is_map_valid = 0;
-		return ;
-	}
-	game_data->rows = rows;
-	game_data->is_map_valid = 1;
-}
-
-void	is_square(t_game_data *game_data)
-{
-	char	**split_file;
-	int		i;
-
-	split_file = ft_split(game_data->file_content, '\n');
-	i = 0;
-	while (i < game_data->rows)
-	{
-		if (ft_strlen(split_file[i]) != game_data->cols)
-		{
-			game_data->is_map_valid = 0;
-			return ;
-		}
-		i++;
-	}
-	game_data->is_map_valid = 1;
-	game_data->map = split_file;
-	if (game_data->file_content)
-		free(game_data->file_content);
-}
-
-int	check_horizontal(char *line)
+static int	char_count(char charToCount, char *file)
 {
 	int	i;
 	int	count;
 
 	i = 0;
 	count = 0;
-	while (line[i])
+	while (file[i])
 	{
-		if (line[i] == '1')
+		if (file[i] == charToCount)
 			count++;
 		i++;
 	}
-	if (count == ft_strlen(line))
-		return (1);
-	return (0);
+	return (count);
 }
 
-void	check_limits(t_game_data *game_data, char	**map)
+static int	validate_map_chars(t_game_data *game_data)
 {
-	int	i;
-	int	is_valid;
+	int		i;
+	int		file_len;
+	char	*file;
 
-	is_valid = check_horizontal(map[0]);
-	is_valid = check_horizontal(map[game_data->rows - 1]);
-	if (!is_valid)
-	{
-		ft_putstr("Error\nMap needs to have obstacles as limits!\n");
-		game_data->is_map_valid = 0;
-		return ;
-	}
-	i = 1;
-	while (i < game_data->rows - 1)
-	{
-		is_valid = map[i][0] == '1' && map[i][game_data->cols -1] == '1';
-		if (!is_valid)
-		{
-			ft_putstr("Error\nMap need to have obstacles as limits!\n");
-			game_data->is_map_valid = 0;
-			return ;
-		}
+	file_len = ft_strlen(game_data->file_content);
+	i = 0;
+	file = game_data->file_content;
+	while (file[i] && is_char_of_map(file[i]))
 		i++;
+	if (i != file_len)
+	{
+		ft_putstr("Error\nMap contains forbbiden characters\n");
+		return (0);
 	}
-	game_data->is_map_valid = 1;
+	if (char_count('E', file) != 1 || char_count('P', file) != 1)
+	{
+		ft_putstr("Error\nMap doesnt have ONE character 'E' or 'P'\n");
+		return (0);
+	}
+	if (char_count('C', file) == 0)
+	{
+		ft_putstr("Error\nMap doesnt at least ONE collectable 'C'\n");
+		return (0);
+	}
+	return (1);
+}
+
+void	validate_map(t_game_data *game_data)
+{
+	if (!validate_map_chars(game_data))
+		return ;
+	get_cols(game_data);
+	get_rows(game_data);
+	if (!game_data->is_map_valid)
+		return ;
+	is_square(game_data);
+	if (game_data->map != NULL)
+		check_limits(game_data, game_data->map);
 }
