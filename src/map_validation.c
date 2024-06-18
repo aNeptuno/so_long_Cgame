@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 13:51:12 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/17 18:07:44 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/06/18 19:17:06 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,18 @@ static int	validate_map_chars(t_game_data *game_data)
 void	validate_map(t_game_data *game_data)
 {
 	if (!validate_map_chars(game_data))
-		return ;
+	{
+		perror("Error\n Invalid map chars");
+		exit(EXIT_FAILURE);
+	}
 	get_cols(game_data);
 	get_rows(game_data);
 	if (!game_data->is_map_valid)
-		return ;
-	is_square(game_data);
+	{
+		perror("Error\n Invalid map proportions (rows and cols)");
+		exit(EXIT_FAILURE);
+	}
+	get_map_matrix(game_data);
 	if (game_data->map != NULL)
-		check_limits(game_data, game_data->map);
+		check_limits(game_data);
 }

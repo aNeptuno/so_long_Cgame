@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 13:24:42 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/17 19:44:35 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/06/18 19:18:41 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,17 +19,17 @@
 # include <fcntl.h>
 # include <mlx.h>
 
-# define MAX_ROWS 1080
-# define MAX_COLS 1920
+# define MAX_ROWS 100
+# define MAX_COLS 100
 # define BUFFER_SIZE 1024
-# define IMG_W 32
-# define IMG_H 32
 # define ESC 65307
 # define UP 119
 # define DOWN 115
 # define RIGHT 100
 # define LEFT 97
+# define PIXELS 32
 
+/// @brief Structure for game sprites (mlx_xpm_file_to_image)
 typedef struct s_sprites
 {
 	void	*bg;
@@ -37,34 +37,43 @@ typedef struct s_sprites
 	void	*player_left;
 	void	*player_right;
 	void	*player_down;
-	void	*object;
 	void	*obstacle;
 	void	*collectable;
 	void	*exit;
 	void	*enemy;
 }				t_sprites;
 
+/// @brief Structure for saving game data
+/**
+ * @file_content: Content of the .ber file.
+ * @fd: File descriptor for the .ber file.
+ * @map: 2D array representing the game map.
+ * @cols: Number of columns in the map.
+ * @rows: Number of rows in the map.
+ * @is_map_valid: Flag indicating if the map is valid.
+ * @mlx: Pointer to mlx connection.
+ * @window: Window created by mlx.
+ * @size_x: Width of the window in pixels (cols * 32).
+ * @size_y: Height of the window in pixels (rows * 32).
+ * @sprites: Pointer to the sprites structure for the game.
+ * @moves_count: Counter for the number of moves made by the player.
+ */
 typedef struct s_game_data
 {
-	char		**map;
 	char		*file_content;
 	int			fd;
+	char		**map;
 	int			cols;
 	int			rows;
 	int			is_map_valid;
+	void		*mlx;
+	void		*window;
 	int			size_x;
 	int			size_y;
 	t_sprites	*sprites;
 	int			moves_count;
 
 }	t_game_data;
-
-typedef struct s_mlx_data
-{
-	void		*mlx;
-	void		*window;
-
-}	t_mlx_data;
 
 // Libft functions (utils)
 int		ft_strlen(const char *str);
@@ -80,12 +89,14 @@ void	*my_malloc(size_t size);
 // Map validation
 void	get_cols(t_game_data *game_data);
 void	get_rows(t_game_data *game_data);
-void	is_square(t_game_data *game_data);
-void	check_limits(t_game_data *game_data, char **map_candidate);
+void	get_map_matrix(t_game_data *game_data);
+void	check_limits(t_game_data *game_data);
 void	validate_map(t_game_data *game_data);
 
-// Initialization
-void	init_sprites(t_game_data *game_data, t_mlx_data *mlx_data);
-void	put_images(t_game_data *game_data, t_mlx_data *mlx_data);
+// Game initialization
+void	get_map(t_game_data *game_data, char *file_content);
+void	init_sprites(t_game_data *game_data);
+void	put_bg(t_game_data *game_data);
+void	put_map(t_game_data *game_data);
 
 #endif

@@ -6,7 +6,7 @@
 #    By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/13 11:52:59 by adiban-i          #+#    #+#              #
-#    Updated: 2024/06/17 19:19:11 by adiban-i         ###   ########.fr        #
+#    Updated: 2024/06/18 15:18:13 by adiban-i         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,7 @@ SRC_FILES = $(LIBFT_DIR)/ft_split.c \
 			$(LIBFT_DIR)/utils.c \
 			$(SRC_DIR)/main.c \
 			$(SRC_DIR)/mymalloc.c \
+			$(SRC_DIR)/get_map.c \
 			$(SRC_DIR)/map_validation.c \
 			$(SRC_DIR)/map_validation_utils.c \
 			$(SRC_DIR)/put_images.c \
