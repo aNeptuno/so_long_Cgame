@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 14:43:20 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/18 19:29:10 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/06/22 19:47:39 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ void	get_map(t_game_data *game_data, char *file_content)
 			printf("Cols: %d\n", game_data->cols);
 			printf("Rows: %d\n", game_data->rows);
 			game_data->size_x = game_data->cols * PIXELS;
-			game_data->size_y = game_data->rows * PIXELS;
+			game_data->size_y = game_data->rows * PIXELS + HEADER_HEIGHT;
 		}
 	}
 }

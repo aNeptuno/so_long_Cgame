@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 18:47:35 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/22 15:42:08 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/06/22 20:15:51 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,14 @@ static void	init_objects(t_game_data *game_data)
 	if (game_data->sprites->exit == NULL)
 	{
 		perror("Error\nError loading exit image.\n");
+		exit(EXIT_FAILURE);
+	}
+	relative_path = "./assets/title.xpm";
+	game_data->sprites->header = mlx_xpm_file_to_image(game_data->mlx,
+			relative_path, &img_width, &img_height);
+	if (game_data->sprites->header == NULL)
+	{
+		perror("Error\nError loading header image.\n");
 		exit(EXIT_FAILURE);
 	}
 }

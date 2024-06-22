@@ -6,7 +6,7 @@
 #    By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/13 11:52:59 by adiban-i          #+#    #+#              #
-#    Updated: 2024/06/22 12:08:46 by adiban-i         ###   ########.fr        #
+#    Updated: 2024/06/22 19:41:50 by adiban-i         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,7 @@ LIBFT_DIR = libft_functions
 SRC_FILES = $(LIBFT_DIR)/ft_split.c \
 			$(LIBFT_DIR)/my_realloc.c \
 			$(LIBFT_DIR)/utils.c \
+			$(LIBFT_DIR)/ft_itoa.c \
 			$(SRC_DIR)/main.c \
 			$(SRC_DIR)/mymalloc.c \
 			$(SRC_DIR)/get_map.c \

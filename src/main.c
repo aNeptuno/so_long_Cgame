@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:32:07 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/22 15:43:21 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/06/22 20:37:29 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,6 +143,12 @@ void init_game_data(t_game_data *gd)
 	gd->min_moves = 100;
 }
 
+int	loop_hook_callback(t_game_data *gd)
+{
+	
+    return gd->player_moves;
+}
+
 int	main(int ac, char **av)
 {
 	t_game_data	game_data;
@@ -159,6 +165,7 @@ int	main(int ac, char **av)
 			put_map(&game_data, 1);
 			mlx_hook(game_data.window, 17, 0L, close_window, &game_data);
 			mlx_key_hook(game_data.window, key_hook_callback, &game_data);
+			mlx_loop_hook(game_data.mlx, loop_hook_callback, &game_data);
 			mlx_loop(game_data.mlx);
 			perror("Error\nmlx loop failed\n");
 			exit(EXIT_FAILURE);

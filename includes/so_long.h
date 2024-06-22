@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 13:24:42 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/22 15:31:54 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/06/22 20:13:29 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@
 # define RIGHT 100
 # define LEFT 97
 # define PIXELS 32
+# define HEADER_HEIGHT 50
 
 /// @brief Structure for game sprites (mlx_xpm_file_to_image)
 typedef struct s_sprites
@@ -42,6 +43,7 @@ typedef struct s_sprites
 	void	*collectable;
 	void	*exit;
 	void	*enemy;
+	void	*header;
 }				t_sprites;
 
 /// @brief Structure for saving game data
@@ -91,6 +93,7 @@ char	*ft_strstr(const char *haystack, const char *needle);
 void	*my_realloc(void *ptr, size_t newsize, size_t oldsize);
 char	**ft_split(char const *s, char c);
 void	*ft_memcpy(void *dst, const void *src, size_t len);
+char	*ft_itoa(int n);
 
 // Debugging
 void	*my_malloc(size_t size);
