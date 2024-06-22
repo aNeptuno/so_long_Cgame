@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 18:47:35 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/18 16:52:57 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/06/22 15:42:08 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,36 @@ static void	init_sprites_player(t_game_data *game_data)
 	int		img_width;
 	int		img_height;
 
-	relative_path = "./assets/ship_up.xpm";
+	relative_path = "./assets/cat_up.xpm";
 	game_data->sprites->player_up = mlx_xpm_file_to_image(game_data->mlx,
 			relative_path, &img_width, &img_height);
 	if (game_data->sprites->player_up == NULL)
 	{
-		perror("Error\nError loading collectable image.\n");
+		perror("Error\nError loading player image.\n");
+		exit(EXIT_FAILURE);
+	}
+	relative_path = "./assets/cat_down.xpm";
+	game_data->sprites->player_down = mlx_xpm_file_to_image(game_data->mlx,
+			relative_path, &img_width, &img_height);
+	if (game_data->sprites->player_down == NULL)
+	{
+		perror("Error\nError loading player image.\n");
+		exit(EXIT_FAILURE);
+	}
+	relative_path = "./assets/cat_left.xpm";
+	game_data->sprites->player_left = mlx_xpm_file_to_image(game_data->mlx,
+			relative_path, &img_width, &img_height);
+	if (game_data->sprites->player_left == NULL)
+	{
+		perror("Error\nError loading player image.\n");
+		exit(EXIT_FAILURE);
+	}
+	relative_path = "./assets/cat_right.xpm";
+	game_data->sprites->player_right = mlx_xpm_file_to_image(game_data->mlx,
+			relative_path, &img_width, &img_height);
+	if (game_data->sprites->player_right == NULL)
+	{
+		perror("Error\nError loading player image.\n");
 		exit(EXIT_FAILURE);
 	}
 }
@@ -50,7 +74,7 @@ static void	init_objects(t_game_data *game_data)
 	int		img_width;
 	int		img_height;
 
-	relative_path = "./assets/collectable.xpm";
+	relative_path = "./assets/item.xpm";
 	game_data->sprites->collectable = mlx_xpm_file_to_image(game_data->mlx,
 			relative_path, &img_width, &img_height);
 	if (game_data->sprites->collectable == NULL)
@@ -68,27 +92,28 @@ static void	init_objects(t_game_data *game_data)
 	}
 }
 
-void	init_sprites(t_game_data *game_data)
+void	init_sprites(t_game_data *gd)
 {
 	char	*relative_path;
 	int		img_width;
 	int		img_height;
 
-	game_data->sprites = malloc(sizeof(t_sprites));
-	if (game_data->sprites == NULL)
+	gd->sprites = malloc(sizeof(t_sprites));
+	if (gd->sprites == NULL)
 	{
 		perror("Error\nMalloc failed for game_data.sprites\n");
 		exit(EXIT_FAILURE);
 	}
-	relative_path = "./assets/background.xpm";
-	game_data->sprites->bg = mlx_xpm_file_to_image(game_data->mlx,
+	relative_path = "./assets/bg.xpm";//"./assets/background.xpm";
+	gd->sprites->bg = mlx_xpm_file_to_image(gd->mlx,
 			relative_path, &img_width, &img_height);
-	if (game_data->sprites->bg == NULL)
+	if (gd->sprites->bg == NULL)
 	{
 		perror("Error\nError loading background image.\n");
 		exit(EXIT_FAILURE);
 	}
-	init_wall(game_data);
-	init_objects(game_data);
-	init_sprites_player(game_data);
+	resize_image(gd, img_width, img_height);
+	init_wall(gd);
+	init_objects(gd);
+	init_sprites_player(gd);
 }

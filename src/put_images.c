@@ -12,31 +12,36 @@
 
 #include "so_long.h"
 
-void	put_bg(t_game_data *game_data)
-{
-	int		y;
-	int		x;
 
-	y = 0;
-	while (y < game_data->size_y)
-	{
-		x = 0;
-		while (x < game_data->size_x)
-		{
-			mlx_put_image_to_window(game_data->mlx, game_data->window,
-				game_data->sprites->bg, x, y);
-			x += PIXELS;
-		}
-		y += PIXELS;
-	}
+void draw_bg(t_game_data *gd)
+{
+    mlx_put_image_to_window(gd->mlx, gd->window, gd->sprites->bg_resized, 0, 0);
 }
 
-static void put_object_sprite(t_game_data *gd, char c, int i, int j)
+static void	put_player(t_game_data *gd, int i, int j)
+{
+	t_sprites	*player_sprite;
+
+	if (gd->new_move == 'D')
+		player_sprite = gd->sprites->player_down;
+	if (gd->new_move == 'U')
+		player_sprite = gd->sprites->player_up;
+	if (gd->new_move == 'L')
+		player_sprite = gd->sprites->player_left;
+	if (gd->new_move == 'R')
+		player_sprite = gd->sprites->player_right;
+
+	mlx_put_image_to_window(gd->mlx, gd->window,
+				player_sprite, j * PIXELS, i * PIXELS);
+	gd->player_x = j;
+	gd->player_y = i;
+}
+
+static void put_object_sprite(t_game_data *gd, char c, int i, int j, int init)
 {
 	if (c == 'P')
 	{
-		mlx_put_image_to_window(gd->mlx, gd->window,
-				gd->sprites->player_up, j * PIXELS, i * PIXELS);
+		put_player(gd, i, j);
 	}
 	else if (c == '1')
 	{
@@ -45,15 +50,20 @@ static void put_object_sprite(t_game_data *gd, char c, int i, int j)
 	}
 	else if (c == 'E')
 	{
-
+		mlx_put_image_to_window(gd->mlx, gd->window,
+				gd->sprites->exit, j * PIXELS, i * PIXELS);
 	}
 	else if (c == 'C')
 	{
+		mlx_put_image_to_window(gd->mlx, gd->window,
+				gd->sprites->collectable, j * PIXELS, i * PIXELS);
+		if (init)
+			gd->map_items++;
 	}
 
 }
 
-void put_map(t_game_data *gd)
+void put_map(t_game_data *gd, int init)
 {
 	int	i;
 	int	j;
@@ -64,7 +74,7 @@ void put_map(t_game_data *gd)
 		j = 0;
 		while (j < gd->cols)
 		{
-			put_object_sprite(gd, gd->map[i][j], i , j);
+			put_object_sprite(gd, gd->map[i][j], i , j, init);
 			j++;
 		}
 		i++;
