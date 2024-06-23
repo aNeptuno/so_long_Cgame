@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 13:24:42 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/22 20:13:29 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/06/23 14:47:19 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define LEFT 97
 # define PIXELS 32
 # define HEADER_HEIGHT 50
+# define UPDATE_FREQ 3000
 
 /// @brief Structure for game sprites (mlx_xpm_file_to_image)
 typedef struct s_sprites
@@ -84,6 +85,12 @@ typedef struct s_game_data
 	int			player_y;
 	char		new_move;
 	int			player_items;
+	int			move_up;
+	int			move_down;
+	int			move_left;
+	int			move_right;
+	int			update_counter;
+	int			game_ended;
 }	t_game_data;
 
 // Libft functions (utils)
@@ -94,9 +101,6 @@ void	*my_realloc(void *ptr, size_t newsize, size_t oldsize);
 char	**ft_split(char const *s, char c);
 void	*ft_memcpy(void *dst, const void *src, size_t len);
 char	*ft_itoa(int n);
-
-// Debugging
-void	*my_malloc(size_t size);
 
 // Map validation
 void	get_cols(t_game_data *game_data);
@@ -109,7 +113,11 @@ void	validate_map(t_game_data *game_data);
 void	get_map(t_game_data *game_data, char *file_content);
 void	resize_image(t_game_data *gd, int original_width, int original_height);
 void	init_sprites(t_game_data *game_data);
+void	init_game_data(t_game_data *gd);
+
+// Sprites rendering and character movement
 void	put_map(t_game_data *gd, int init);
 void 	draw_bg(t_game_data *gd);
+int		render_next_frame_loop(t_game_data *gd);
 
 #endif

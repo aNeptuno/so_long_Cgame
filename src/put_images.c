@@ -73,10 +73,10 @@ static void draw_header(t_game_data *gd)
     collected_pos_x = gd->size_x / 12;
 	mlx_put_image_to_window(gd->mlx, gd->window, gd->sprites->header, title_pos_x, 0);
     mlx_string_put(gd->mlx, gd->window, title_pos_x - 100, 45, 0xFFFFFF, "Cybercat Chronicles: The Ancient Floppy Hunt");
-    mlx_string_put(gd->mlx, gd->window, moves_pos_x, 25, 0x800080, "Player Moves:");
-    mlx_string_put(gd->mlx, gd->window, moves_pos_x + 100, 25, 0x800080, ft_itoa(gd->player_moves));
-	mlx_string_put(gd->mlx, gd->window, collected_pos_x, 25, 0x800080, "Collected Floppy:");
-    mlx_string_put(gd->mlx, gd->window, collected_pos_x + 120, 25, 0x800080, ft_itoa(gd->player_items));
+    mlx_string_put(gd->mlx, gd->window, moves_pos_x, 30, 0x800080, "Player Moves:");
+    mlx_string_put(gd->mlx, gd->window, moves_pos_x + 100, 30, 0x800080, ft_itoa(gd->player_moves));
+	mlx_string_put(gd->mlx, gd->window, collected_pos_x, 30, 0x800080, "Collected Floppy:");
+    mlx_string_put(gd->mlx, gd->window, collected_pos_x + 120, 30, 0x800080, ft_itoa(gd->player_items));
 }
 
 
