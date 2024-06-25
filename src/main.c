@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:32:07 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/23 14:47:24 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/06/26 00:20:18 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,6 @@
 
 int	close_window(t_game_data *gd)
 {
-	if (gd->window)
-		mlx_destroy_window(gd->mlx, gd->window);
-	if (gd->mlx)
-		mlx_destroy_display(gd->mlx);
-	free(gd->mlx);
 	if (!gd->game_ended)
 	{
 		ft_putstr("\033[1;31m");
@@ -30,6 +25,16 @@ int	close_window(t_game_data *gd)
 		ft_putstr("\033[1;33m");
 		ft_putstr("\nThanks for playing ^^!\n");
 		ft_putstr("\033[0m\n");
+	}
+	if (gd->window)
+    {
+		mlx_destroy_window(gd->mlx, gd->window);
+		gd->window = NULL;
+	}
+	if (gd->mlx)
+	{
+		mlx_destroy_display(gd->mlx);
+		gd->mlx = NULL;
 	}
 	exit(EXIT_SUCCESS);
 	return (0);
@@ -57,7 +62,7 @@ int	key_press(int keycode, t_game_data *gd)
 	{
 		gd->move_right = 1;
 	}
-	printf("keycode: %d\n",keycode);
+	printf("keycode: %d\n", keycode);
 	return (0);
 }
 
@@ -104,12 +109,13 @@ int	main(int ac, char **av)
 			init_game_data(&game_data);
 			init_sprites(&game_data);
 			draw_bg(&game_data);
-			put_map(&game_data, 1);
-			mlx_hook(game_data.window, 2, 1L<<0, key_press, &game_data);
-			mlx_hook(game_data.window, 3, 1L<<1, key_release, &game_data);
+			put_map(&game_data);
+			mlx_hook(game_data.window, 17, 0, &close_window, &game_data);
+			mlx_hook(game_data.window, 2, 1L << 0, key_press, &game_data);
+			mlx_hook(game_data.window, 3, 1L << 1, key_release, &game_data);
 			mlx_loop_hook(game_data.mlx, render_next_frame_loop, &game_data);
 			mlx_loop(game_data.mlx);
-			perror("Error\nmlx loop failed\n");
+			perror("Error\nMlx loop failed\n");
 			exit(EXIT_FAILURE);
 		}
 	}

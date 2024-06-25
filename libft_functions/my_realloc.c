@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 18:05:03 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/17 19:19:50 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/06/26 00:23:11 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,11 @@ void	*my_realloc(void *ptr, size_t newsize, size_t oldsize)
 	{
 		newptr = malloc(newsize);
 		if (newptr == NULL)
-			return NULL;
+			return (NULL);
 		if (newsize < oldsize)
 			oldsize = newsize;
 		ft_memcpy(newptr, ptr, oldsize);
+		free(newptr);
 		return (ptr);
 	}
 }

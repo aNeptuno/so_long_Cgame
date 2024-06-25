@@ -6,11 +6,20 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 13:51:12 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/18 19:17:06 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/06/25 15:08:15 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
+
+void	map_error(t_game_data *gd, char *msg)
+{
+	ft_putstr("\033[1;31m");
+	ft_putstr("Error\n");
+	ft_putstr(msg);
+	ft_putstr("\033[0m\n");
+	gd->is_map_valid = 0;
+}
 
 static int	is_char_of_map(char c)
 {
@@ -49,17 +58,17 @@ static int	validate_map_chars(t_game_data *game_data)
 		i++;
 	if (i != file_len)
 	{
-		ft_putstr("Error\nMap contains forbbiden characters\n");
+		map_error(game_data, "Map contains forbbiden characters\n");
 		return (0);
 	}
 	if (char_count('E', file) != 1 || char_count('P', file) != 1)
 	{
-		ft_putstr("Error\nMap doesnt have ONE character 'E' or 'P'\n");
+		map_error(game_data, "Map doesnt have ONE character 'E' or 'P'\n");
 		return (0);
 	}
 	if (char_count('C', file) == 0)
 	{
-		ft_putstr("Error\nMap doesnt at least ONE collectable 'C'\n");
+		map_error(game_data, "Map doesnt at least ONE collectable 'C'\n");
 		return (0);
 	}
 	return (1);
@@ -68,15 +77,12 @@ static int	validate_map_chars(t_game_data *game_data)
 void	validate_map(t_game_data *game_data)
 {
 	if (!validate_map_chars(game_data))
-	{
-		perror("Error\n Invalid map chars");
 		exit(EXIT_FAILURE);
-	}
 	get_cols(game_data);
 	get_rows(game_data);
 	if (!game_data->is_map_valid)
 	{
-		perror("Error\n Invalid map proportions (rows and cols)");
+		map_error(game_data, "Invalid map proportions (rows and cols)\n");
 		exit(EXIT_FAILURE);
 	}
 	get_map_matrix(game_data);

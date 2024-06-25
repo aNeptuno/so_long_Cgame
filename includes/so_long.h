@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 13:24:42 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/23 14:47:19 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/06/26 00:24:02 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,13 @@
 # define LEFT 97
 # define PIXELS 32
 # define HEADER_HEIGHT 50
-# define UPDATE_FREQ 3000
+# define UPDATE_FREQ 3500
+
+typedef struct s_point
+{
+	int	x;
+	int	y;
+}	t_point;
 
 /// @brief Structure for game sprites (mlx_xpm_file_to_image)
 typedef struct s_sprites
@@ -59,11 +65,19 @@ typedef struct s_sprites
  * @window: Window created by mlx.
  * @size_x: Width of the window in pixels (cols * 32).
  * @size_y: Height of the window in pixels (rows * 32).
+ * @map_items: Number of items to collect in the map.
+ * @first_init: Flag indicating if this is the first initialization.
  * @sprites: Pointer to the sprites structure for the game.
  * @player_moves: Counter for the number of moves made by the player.
- * @player_x: player position in x.
- * @player_y: player position in y.
- * @new_move: char representing new_move direction: U (up), D(down), L(left), R(right).
+ * @player: Pointer to the player position structure.
+ * @new_move: New move direction: U (up), D(down), L(left), R(right).
+ * @player_items: Number of items collected by the player.
+ * @move_up: Flag indicating if the up move key is pressed.
+ * @move_down: Flag indicating if the down move key is pressed.
+ * @move_left: Flag indicating if the left move key is pressed.
+ * @move_right: Flag indicating if the right move key is pressed.
+ * @update_counter: Counter for updating the game state.
+ * @game_ended: Flag indicating if the game has ended.
  */
 typedef struct s_game_data
 {
@@ -78,11 +92,10 @@ typedef struct s_game_data
 	int			size_x;
 	int			size_y;
 	int			map_items;
-	int			min_moves;
+	int			first_init;
 	t_sprites	*sprites;
 	int			player_moves;
-	int			player_x;
-	int			player_y;
+	t_point		*player;
 	char		new_move;
 	int			player_items;
 	int			move_up;
@@ -108,16 +121,17 @@ void	get_rows(t_game_data *game_data);
 void	get_map_matrix(t_game_data *game_data);
 void	check_limits(t_game_data *game_data);
 void	validate_map(t_game_data *game_data);
+void	map_error(t_game_data *gd, char *msg);
 
 // Game initialization
 void	get_map(t_game_data *game_data, char *file_content);
+void	init_game_data(t_game_data *gd);
 void	resize_image(t_game_data *gd, int original_width, int original_height);
 void	init_sprites(t_game_data *game_data);
-void	init_game_data(t_game_data *gd);
 
 // Sprites rendering and character movement
-void	put_map(t_game_data *gd, int init);
-void 	draw_bg(t_game_data *gd);
+void	put_map(t_game_data *gd);
+void	draw_bg(t_game_data *gd);
 int		render_next_frame_loop(t_game_data *gd);
 
 #endif

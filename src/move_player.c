@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 14:21:29 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/23 14:40:11 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/06/26 00:27:14 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,29 +32,48 @@ static void	change_player_sprite(int coord_x, int coord_y, t_game_data *gd)
 	}
 }
 
-static void	display_stats(t_game_data *gd)
+static void	display_stats(t_game_data *gd, int is_moves)
 {
-	ft_putstr("Collected Floppy:");
-	ft_putstr(ft_itoa(gd->player_items));
-	ft_putstr(" | Total moves: ");
-	ft_putstr(ft_itoa(gd->player_moves));
+	char	*moves;
+	char	*items;
+	
+	moves = ft_itoa(gd->player_moves);
+	items = ft_itoa(gd->player_items);
+	if (is_moves)
+	{
+		ft_putstr("\033[2J");
+		ft_putstr("\033[H");
+		ft_putstr("\033[1;33m");
+		ft_putstr("Total moves: ");
+		ft_putstr(moves);
+		ft_putstr("\033[0m\n");
+	}
+	else
+	{
+		ft_putstr("Collected Floppy: ");
+		ft_putstr(items);
+		ft_putstr(" | Total moves: ");
+		ft_putstr(moves);
+	}
+	free(moves);
+	free(items);
 }
 
 static void	move_exit(t_game_data *gd)
 {
 	gd->game_ended = 1;
-	if (gd->player_items == gd->map_items && gd->player_moves <= gd->min_moves)
+	if (gd->player_items == gd->map_items)
 	{
 		ft_putstr("\033[1;32m");
 		ft_putstr("\nYou won! :D\n");
-		display_stats(gd);
+		display_stats(gd, 0);
 		ft_putstr("\033[0m\n");
 	}
 	else
 	{
 		ft_putstr("\033[1;31m");
 		ft_putstr("\nYou lose :(\n");
-		display_stats(gd);
+		display_stats(gd, 0);
 		ft_putstr("\033[0m\n");
 	}
 }
@@ -63,24 +82,22 @@ static void	move_player(int coord_x, int coord_y, t_game_data *gd)
 {
 	char	c;
 
-	c = gd->map[gd->player_y - coord_y][gd->player_x + coord_x];
+	c = gd->map[gd->player->y - coord_y][gd->player->x + coord_x];
 	if (c != '1')
 	{
-		gd->map[gd->player_y][gd->player_x] = '0';
-		gd->player_y -= coord_y;
-		gd->player_x += coord_x;
-		gd->map[gd->player_y][gd->player_x] = 'P';
+		gd->map[gd->player->y][gd->player->x] = '0';
+		gd->player->y -= coord_y;
+		gd->player->x += coord_x;
+		gd->map[gd->player->y][gd->player->x] = 'P';
 		change_player_sprite(coord_x, coord_y, gd);
 		gd->player_moves++;
+		display_stats(gd, 1);
 		if (c == 'C')
 			gd->player_items++;
 		if (c == 'E')
 		{
 			move_exit(gd);
 		}
-		mlx_clear_window(gd->mlx, gd->window);
-		draw_bg(gd);
-		put_map(gd, 0);
 	}
 }
 
@@ -105,6 +122,12 @@ int	render_next_frame_loop(t_game_data *gd)
 		if (gd->move_right)
 		{
 			move_player(1, 0, gd);
+		}
+		if (gd->mlx && gd->window)
+		{
+			mlx_clear_window(gd->mlx, gd->window);
+			draw_bg(gd);
+			put_map(gd);
 		}
 	}
 	return (0);

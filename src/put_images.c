@@ -1,21 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   put_images.c                                        :+:      :+:    :+:   */
+/*   put_images.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 18:21:58 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/17 18:21:58 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/06/26 00:07:34 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-
-void draw_bg(t_game_data *gd)
+void	draw_bg(t_game_data *gd)
 {
-    mlx_put_image_to_window(gd->mlx, gd->window, gd->sprites->bg_resized, 0, HEADER_HEIGHT);
+	mlx_put_image_to_window(gd->mlx, gd->window, gd->sprites->bg_resized,
+		0, HEADER_HEIGHT);
 }
 
 static void	put_player(t_game_data *gd, int i, int j)
@@ -30,14 +30,13 @@ static void	put_player(t_game_data *gd, int i, int j)
 		player_sprite = gd->sprites->player_left;
 	if (gd->new_move == 'R')
 		player_sprite = gd->sprites->player_right;
-
 	mlx_put_image_to_window(gd->mlx, gd->window,
-				player_sprite, j * PIXELS, (i * PIXELS) + HEADER_HEIGHT);
-	gd->player_x = j;
-	gd->player_y = i;
+		player_sprite, j * PIXELS, (i * PIXELS) + HEADER_HEIGHT);
+	gd->player->x = j;
+	gd->player->y = i;
 }
 
-static void put_object_sprite(t_game_data *gd, char c, int i, int j, int init)
+static void	put_object_sprite(t_game_data *gd, char c, int i, int j)
 {
 	if (c == 'P')
 	{
@@ -46,41 +45,51 @@ static void put_object_sprite(t_game_data *gd, char c, int i, int j, int init)
 	else if (c == '1')
 	{
 		mlx_put_image_to_window(gd->mlx, gd->window,
-				gd->sprites->obstacle, j * PIXELS, (i * PIXELS) + HEADER_HEIGHT);
+			gd->sprites->obstacle, j * PIXELS, (i * PIXELS) + HEADER_HEIGHT);
 	}
 	else if (c == 'E')
 	{
 		mlx_put_image_to_window(gd->mlx, gd->window,
-				gd->sprites->exit, j * PIXELS, (i * PIXELS) + HEADER_HEIGHT);
+			gd->sprites->exit, j * PIXELS, (i * PIXELS) + HEADER_HEIGHT);
 	}
 	else if (c == 'C')
 	{
 		mlx_put_image_to_window(gd->mlx, gd->window,
-				gd->sprites->collectable, j * PIXELS, (i * PIXELS) + HEADER_HEIGHT);
-		if (init)
+			gd->sprites->collectable, j * PIXELS, (i * PIXELS) + HEADER_HEIGHT);
+		if (gd->first_init)
 			gd->map_items++;
 	}
 }
 
-static void draw_header(t_game_data *gd)
+static void	ft_mlx_string(t_game_data *gd, int x, int y, char *title)
 {
-    int title_pos_x;
-    int moves_pos_x;
-    int collected_pos_x;
-
-	title_pos_x = (gd->size_x / 2) - 25;
-    moves_pos_x = gd->size_x - 200;
-    collected_pos_x = gd->size_x / 12;
-	mlx_put_image_to_window(gd->mlx, gd->window, gd->sprites->header, title_pos_x, 0);
-    mlx_string_put(gd->mlx, gd->window, title_pos_x - 100, 45, 0xFFFFFF, "Cybercat Chronicles: The Ancient Floppy Hunt");
-    mlx_string_put(gd->mlx, gd->window, moves_pos_x, 30, 0x800080, "Player Moves:");
-    mlx_string_put(gd->mlx, gd->window, moves_pos_x + 100, 30, 0x800080, ft_itoa(gd->player_moves));
-	mlx_string_put(gd->mlx, gd->window, collected_pos_x, 30, 0x800080, "Collected Floppy:");
-    mlx_string_put(gd->mlx, gd->window, collected_pos_x + 120, 30, 0x800080, ft_itoa(gd->player_items));
+	mlx_string_put(gd->mlx, gd->window, x, y, 0x800080, title);
 }
 
+static void	draw_header(t_game_data *gd)
+{
+	int		title_x;
+	int		collected_x;
+	char	*moves;
+	char	*items;
+	
+	title_x = (gd->size_x / 2) - 25;
+	collected_x = gd->size_x / 12;
+	moves = ft_itoa(gd->player_moves);
+	items = ft_itoa(gd->player_items);
+	mlx_put_image_to_window(gd->mlx, gd->window, gd->sprites->header,
+		title_x, 0);
+	mlx_string_put(gd->mlx, gd->window, title_x - 100, 45, 0xFFFFFF,
+		"Cybercat Chronicles: The Ancient Floppy Hunt");
+	ft_mlx_string(gd, gd->size_x - 200, 30, "Player Moves: ");
+	ft_mlx_string(gd, gd->size_x - 100, 30, moves);
+	ft_mlx_string(gd, collected_x, 30, "Collected Floppy: ");
+	ft_mlx_string(gd, collected_x + 120, 30, items);
+	free(moves);
+	free(items);
+}
 
-void put_map(t_game_data *gd, int init)
+void	put_map(t_game_data *gd)
 {
 	int	i;
 	int	j;
@@ -91,10 +100,11 @@ void put_map(t_game_data *gd, int init)
 		j = 0;
 		while (j < gd->cols)
 		{
-			put_object_sprite(gd, gd->map[i][j], i , j, init);
+			put_object_sprite(gd, gd->map[i][j], i, j);
 			j++;
 		}
 		i++;
 	}
+	gd->first_init = 0;
 	draw_header(gd);
 }

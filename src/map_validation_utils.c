@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 13:30:05 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/18 19:22:22 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/06/25 15:05:21 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,6 @@ void	get_map_matrix(t_game_data *game_data)
 	i = 0;
 	while (i < game_data->rows)
 	{
-		/* printf("Cols: %d\n", game_data->cols);
-		printf("Rows: %d\n", game_data->rows);
-		printf("\nsplit_file[%d]:",i);
-		puts(split_file[i]); */
 		if (ft_strlen(split_file[i]) != game_data->cols)
 		{
 			game_data->is_map_valid = 0;
@@ -107,8 +103,8 @@ static int	check_horizontal(char *line)
 
 void	check_limits(t_game_data *game_data)
 {
-	int	i;
-	int	is_valid;
+	int		i;
+	int		is_valid;
 	char	**map;
 
 	map = game_data->map;
@@ -116,8 +112,8 @@ void	check_limits(t_game_data *game_data)
 	is_valid = check_horizontal(map[game_data->rows - 1]);
 	if (!is_valid)
 	{
-		ft_putstr("Error\nMap needs to have obstacles as limits (wrong horizontal limits)!\n");
-		game_data->is_map_valid = 0;
+		map_error(game_data,
+			"Map need to have obstacles as horizontal limits!\n");
 		return ;
 	}
 	i = 1;
@@ -126,8 +122,7 @@ void	check_limits(t_game_data *game_data)
 		is_valid = map[i][0] == '1' && map[i][game_data->cols -1] == '1';
 		if (!is_valid)
 		{
-			ft_putstr("Error\nMap need to have obstacles as limits!\n");
-			game_data->is_map_valid = 0;
+			map_error(game_data, "Map need to have obstacles as limits!\n");
 			return ;
 		}
 		i++;

@@ -6,7 +6,7 @@
 #    By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/13 11:52:59 by adiban-i          #+#    #+#              #
-#    Updated: 2024/06/23 14:47:44 by adiban-i         ###   ########.fr        #
+#    Updated: 2024/06/25 14:44:22 by adiban-i         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,15 +40,15 @@ SRC_FILES = $(LIBFT_DIR)/ft_split.c \
 			$(LIBFT_DIR)/my_realloc.c \
 			$(LIBFT_DIR)/utils.c \
 			$(LIBFT_DIR)/ft_itoa.c \
+			$(LIBFT_DIR)/ft_calloc.c \
 			$(SRC_DIR)/main.c \
 			$(SRC_DIR)/move_player.c \
-			$(SRC_DIR)/solve_map_init_data.c \
 			$(SRC_DIR)/get_map.c \
 			$(SRC_DIR)/map_validation.c \
 			$(SRC_DIR)/map_validation_utils.c \
 			$(SRC_DIR)/put_images.c \
 			$(SRC_DIR)/resize_img.c \
-			$(SRC_DIR)/init_sprites.c 
+			$(SRC_DIR)/init_sprites.c
 			
 OBJ_FILES = $(SRC_FILES:.c=.o)
 

@@ -6,12 +6,28 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 14:43:20 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/22 19:47:39 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/06/25 15:59:00 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "so_long.h"
+
+static void	error_and_free(t_game_data *game_data, char *msg)
+{
+	perror("Error\n");
+	ft_putstr(msg);
+	free(game_data->file_content);
+	game_data->file_content = NULL;
+	return ;
+}
+
+static void	close_and_check_errors(t_game_data *game_data, ssize_t	bytes_read)
+{
+	if (bytes_read == -1)
+		error_and_free(game_data, "Error reading file");
+	if (close(game_data->fd) == -1)
+		error_and_free(game_data, "Error closing the file");
+}
 
 // Read the file and save it to a string
 static void	read_file(t_game_data *game_data)
@@ -25,31 +41,21 @@ static void	read_file(t_game_data *game_data)
 	{
 		content_size = 0;
 		game_data->file_content = NULL;
-		while ((bytes_read = read(game_data->fd, buffer, BUFFER_SIZE)) > 0)
+		bytes_read = 1;
+		while (bytes_read > 0)
 		{
-			new_file_content = my_realloc(game_data->file_content, content_size + bytes_read + 1, content_size);
+			bytes_read = read(game_data->fd, buffer, BUFFER_SIZE);
+			new_file_content = my_realloc(game_data->file_content,
+					content_size + bytes_read + 1, content_size);
 			if (new_file_content == NULL)
-			{
-				perror("Error\nError allocating memory");
-				free(game_data->file_content);
-				game_data->file_content = NULL;
-				return ;
-			}
+				error_and_free(game_data, "Error allocating memory");
 			game_data->file_content = new_file_content;
-			ft_memcpy(game_data->file_content + content_size, buffer, bytes_read);
+			ft_memcpy(game_data->file_content + content_size,
+				buffer, bytes_read);
 			content_size += bytes_read;
 			game_data->file_content[content_size] = '\0';
-        }
-		if (bytes_read == -1)
-		{
-			perror("Error\nError reading file");
-			free(game_data->file_content);
-			game_data->file_content = NULL;
 		}
-		if (close(game_data->fd) == -1)
-		{
-			perror("Error\nError closing the file");
-		}
+		close_and_check_errors(game_data, bytes_read);
 	}
 }
 
@@ -90,4 +96,20 @@ void	get_map(t_game_data *game_data, char *file_content)
 			game_data->size_y = game_data->rows * PIXELS + HEADER_HEIGHT;
 		}
 	}
+}
+
+void	init_game_data(t_game_data *gd)
+{
+	gd->new_move = 'D';
+	gd->player_moves = 0;
+	gd->player_items = 0;
+	gd->map_items = 0;
+	gd->move_up = 0;
+	gd->move_down = 0;
+	gd->move_left = 0;
+	gd->move_right = 0;
+	gd->update_counter = 0;
+	gd->game_ended = 0;
+	gd->player = malloc(sizeof(t_point));
+	gd->first_init = 1;
 }
