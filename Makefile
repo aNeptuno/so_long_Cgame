@@ -6,7 +6,7 @@
 #    By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/06/13 11:52:59 by adiban-i          #+#    #+#              #
-#    Updated: 2024/06/25 14:44:22 by adiban-i         ###   ########.fr        #
+#    Updated: 2024/07/02 02:54:36 by adiban-i         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,16 +38,18 @@ LIBFT_DIR = libft_functions
 # SOURCE FILES AND OBJECT FILES
 SRC_FILES = $(LIBFT_DIR)/ft_split.c \
 			$(LIBFT_DIR)/my_realloc.c \
-			$(LIBFT_DIR)/utils.c \
+			$(LIBFT_DIR)/general.c \
 			$(LIBFT_DIR)/ft_itoa.c \
 			$(LIBFT_DIR)/ft_calloc.c \
 			$(SRC_DIR)/main.c \
 			$(SRC_DIR)/move_player.c \
+			$(SRC_DIR)/mlx_hooks.c \
 			$(SRC_DIR)/get_map.c \
 			$(SRC_DIR)/map_validation.c \
 			$(SRC_DIR)/map_validation_utils.c \
 			$(SRC_DIR)/put_images.c \
 			$(SRC_DIR)/resize_img.c \
+			$(SRC_DIR)/utils.c \
 			$(SRC_DIR)/init_sprites.c
 			
 OBJ_FILES = $(SRC_FILES:.c=.o)

@@ -6,17 +6,11 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 18:21:58 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/26 00:07:34 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/07/02 03:03:04 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-void	draw_bg(t_game_data *gd)
-{
-	mlx_put_image_to_window(gd->mlx, gd->window, gd->sprites->bg_resized,
-		0, HEADER_HEIGHT);
-}
 
 static void	put_player(t_game_data *gd, int i, int j)
 {
@@ -72,7 +66,7 @@ static void	draw_header(t_game_data *gd)
 	int		collected_x;
 	char	*moves;
 	char	*items;
-	
+
 	title_x = (gd->size_x / 2) - 25;
 	collected_x = gd->size_x / 12;
 	moves = ft_itoa(gd->player_moves);
@@ -81,8 +75,8 @@ static void	draw_header(t_game_data *gd)
 		title_x, 0);
 	mlx_string_put(gd->mlx, gd->window, title_x - 100, 45, 0xFFFFFF,
 		"Cybercat Chronicles: The Ancient Floppy Hunt");
-	ft_mlx_string(gd, gd->size_x - 200, 30, "Player Moves: ");
-	ft_mlx_string(gd, gd->size_x - 100, 30, moves);
+	ft_mlx_string(gd, gd->size_x - 150, 30, "Player Moves: ");
+	ft_mlx_string(gd, gd->size_x - 50, 30, moves);
 	ft_mlx_string(gd, collected_x, 30, "Collected Floppy: ");
 	ft_mlx_string(gd, collected_x + 120, 30, items);
 	free(moves);
@@ -94,6 +88,9 @@ void	put_map(t_game_data *gd)
 	int	i;
 	int	j;
 
+	draw_header(gd);
+	mlx_put_image_to_window(gd->mlx, gd->window, gd->sprites->bg_resized,
+		0, HEADER_HEIGHT);
 	i = 0;
 	while (i < gd->rows)
 	{
@@ -106,5 +103,4 @@ void	put_map(t_game_data *gd)
 		i++;
 	}
 	gd->first_init = 0;
-	draw_header(gd);
 }

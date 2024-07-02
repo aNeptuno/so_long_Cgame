@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 13:24:42 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/26 00:24:02 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/07/02 02:56:50 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ typedef struct s_game_data
 	int			game_ended;
 }	t_game_data;
 
-// Libft functions (utils)
+// Libft functions
 int		ft_strlen(const char *str);
 void	ft_putstr(char *s);
 char	*ft_strstr(const char *haystack, const char *needle);
@@ -114,6 +114,12 @@ void	*my_realloc(void *ptr, size_t newsize, size_t oldsize);
 char	**ft_split(char const *s, char c);
 void	*ft_memcpy(void *dst, const void *src, size_t len);
 char	*ft_itoa(int n);
+
+// Game initialization
+void	get_map(t_game_data *game_data, char *file_content);
+void	resize_image(t_game_data *gd, int original_width, int original_height);
+void	init_sprites(t_game_data *game_data);
+void	error_and_free(t_game_data *game_data, char *msg);
 
 // Map validation
 void	get_cols(t_game_data *game_data);
@@ -123,15 +129,13 @@ void	check_limits(t_game_data *game_data);
 void	validate_map(t_game_data *game_data);
 void	map_error(t_game_data *gd, char *msg);
 
-// Game initialization
-void	get_map(t_game_data *game_data, char *file_content);
-void	init_game_data(t_game_data *gd);
-void	resize_image(t_game_data *gd, int original_width, int original_height);
-void	init_sprites(t_game_data *game_data);
+// Mlx hooks
+int	close_window(t_game_data *gd);
+int	key_press(int keycode, t_game_data *gd);
+int	key_release(int keycode, t_game_data *gd);
 
 // Sprites rendering and character movement
 void	put_map(t_game_data *gd);
-void	draw_bg(t_game_data *gd);
 int		render_next_frame_loop(t_game_data *gd);
 
 #endif

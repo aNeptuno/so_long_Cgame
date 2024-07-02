@@ -6,20 +6,11 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 14:43:20 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/25 15:59:00 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/07/02 02:55:14 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
-
-static void	error_and_free(t_game_data *game_data, char *msg)
-{
-	perror("Error\n");
-	ft_putstr(msg);
-	free(game_data->file_content);
-	game_data->file_content = NULL;
-	return ;
-}
 
 static void	close_and_check_errors(t_game_data *game_data, ssize_t	bytes_read)
 {
@@ -59,22 +50,44 @@ static void	read_file(t_game_data *game_data)
 	}
 }
 
+static int	is_valid_file_name(char *file_path)
+{
+	char	*last_is_ber_ext;
+	int		not_just_dotber;
+	char	*first_ber_ext;
+
+	last_is_ber_ext = ft_strstr(file_path + (ft_strlen(file_path) - 4), ".ber");
+	not_just_dotber = ft_strlen(file_path) != ft_strlen(".ber");
+	if (last_is_ber_ext && not_just_dotber)
+	{
+		first_ber_ext = ft_strstr(file_path, ".ber");
+		if (ft_strlen(first_ber_ext) != ft_strlen(last_is_ber_ext))
+			return (0);
+		else
+			return (1);
+	}
+	else
+		return (0);
+}
+
 static void	open_file(char	*file_path, t_game_data *game_data)
 {
 	int	fd;
-	
-	if (ft_strstr(file_path, ".ber"))
+
+	if (is_valid_file_name(file_path))
 	{
 		fd = open(file_path, O_RDONLY);
 		if (fd == -1)
 		{
 			perror("Error\nError opening the file");
+			exit(EXIT_FAILURE);
 		}
 		game_data->fd = fd;
 	}
 	else
 	{
 		ft_putstr("Error\nIncorrect file extension (extension must be .ber)\n");
+		exit(EXIT_FAILURE);
 		game_data->fd = -1;
 	}
 	return ;
@@ -90,26 +103,8 @@ void	get_map(t_game_data *game_data, char *file_content)
 		validate_map(game_data);
 		if (game_data->is_map_valid)
 		{
-			printf("Cols: %d\n", game_data->cols);
-			printf("Rows: %d\n", game_data->rows);
 			game_data->size_x = game_data->cols * PIXELS;
 			game_data->size_y = game_data->rows * PIXELS + HEADER_HEIGHT;
 		}
 	}
-}
-
-void	init_game_data(t_game_data *gd)
-{
-	gd->new_move = 'D';
-	gd->player_moves = 0;
-	gd->player_items = 0;
-	gd->map_items = 0;
-	gd->move_up = 0;
-	gd->move_down = 0;
-	gd->move_left = 0;
-	gd->move_right = 0;
-	gd->update_counter = 0;
-	gd->game_ended = 0;
-	gd->player = malloc(sizeof(t_point));
-	gd->first_init = 1;
 }

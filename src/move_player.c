@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 14:21:29 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/26 00:27:14 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/07/02 03:05:02 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static void	display_stats(t_game_data *gd, int is_moves)
 {
 	char	*moves;
 	char	*items;
-	
+
 	moves = ft_itoa(gd->player_moves);
 	items = ft_itoa(gd->player_items);
 	if (is_moves)
@@ -71,8 +71,10 @@ static void	move_exit(t_game_data *gd)
 	}
 	else
 	{
+		ft_putstr("\033[2J");
+		ft_putstr("\033[H");
 		ft_putstr("\033[1;31m");
-		ft_putstr("\nYou lose :(\n");
+		ft_putstr("\nYou failed your mission to collect them all :(\n");
 		display_stats(gd, 0);
 		ft_putstr("\033[0m\n");
 	}
@@ -108,25 +110,16 @@ int	render_next_frame_loop(t_game_data *gd)
 	{
 		gd->update_counter = 0;
 		if (gd->move_up)
-		{
 			move_player(0, 1, gd);
-		}
 		if (gd->move_down)
-		{
 			move_player(0, -1, gd);
-		}
 		if (gd->move_left)
-		{
 			move_player(-1, 0, gd);
-		}
 		if (gd->move_right)
-		{
 			move_player(1, 0, gd);
-		}
 		if (gd->mlx && gd->window)
 		{
 			mlx_clear_window(gd->mlx, gd->window);
-			draw_bg(gd);
 			put_map(gd);
 		}
 	}
