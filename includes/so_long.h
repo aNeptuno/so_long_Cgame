@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 13:24:42 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/07/02 02:56:50 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/07/02 17:21:55 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,25 @@ typedef struct s_point
 	int	y;
 }	t_point;
 
+/// @brief Structure for persistent animation data
+/**
+ * @current_frame: Frame index.
+ * @frame_count: Number of frames in idle animation.
+ * @frame_delay: Adjust the delay to control the animation speed.
+ * @frame_counter: Counter to manage frame change timing.
+ * @position_x: coord x of the sprite.
+ * @position_y: coord y of the sprite.
+ */
+typedef struct s_anim_data
+{
+	int	current_frame;
+	int	frame_count;
+	int	frame_delay;
+	int	frame_counter;
+	int	position_x;
+	int	position_y;
+}	t_anim_data;
+
 /// @brief Structure for game sprites (mlx_xpm_file_to_image)
 typedef struct s_sprites
 {
@@ -51,6 +70,7 @@ typedef struct s_sprites
 	void	*exit;
 	void	*enemy;
 	void	*header;
+	void	*exit_anim_frames[6];
 }				t_sprites;
 
 /// @brief Structure for saving game data
@@ -78,6 +98,7 @@ typedef struct s_sprites
  * @move_right: Flag indicating if the right move key is pressed.
  * @update_counter: Counter for updating the game state.
  * @game_ended: Flag indicating if the game has ended.
+ * @exit_anim_data: Contains necessary data to render exit animation.
  */
 typedef struct s_game_data
 {
@@ -104,6 +125,7 @@ typedef struct s_game_data
 	int			move_right;
 	int			update_counter;
 	int			game_ended;
+	t_anim_data	*exit_anim_data;
 }	t_game_data;
 
 // Libft functions
@@ -114,12 +136,15 @@ void	*my_realloc(void *ptr, size_t newsize, size_t oldsize);
 char	**ft_split(char const *s, char c);
 void	*ft_memcpy(void *dst, const void *src, size_t len);
 char	*ft_itoa(int n);
+char	*ft_strjoin(char const *s1, char const *s2);
 
-// Game initialization
+// Game initialization and data cleaning
 void	get_map(t_game_data *game_data, char *file_content);
 void	resize_image(t_game_data *gd, int original_width, int original_height);
 void	init_sprites(t_game_data *game_data);
 void	error_and_free(t_game_data *game_data, char *msg);
+void	free_game_data(t_game_data *game_data);
+void	load_animations(t_game_data *gd);
 
 // Map validation
 void	get_cols(t_game_data *game_data);
@@ -136,6 +161,7 @@ int	key_release(int keycode, t_game_data *gd);
 
 // Sprites rendering and character movement
 void	put_map(t_game_data *gd);
+void	put_animations(t_game_data *gd);
 int		render_next_frame_loop(t_game_data *gd);
 
 #endif

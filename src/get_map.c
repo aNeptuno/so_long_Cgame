@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 14:43:20 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/07/02 02:55:14 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/07/02 16:58:31 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ void	get_map(t_game_data *game_data, char *file_content)
 	read_file(game_data);
 	if (game_data->file_content)
 	{
-		puts(game_data->file_content);
 		validate_map(game_data);
 		if (game_data->is_map_valid)
 		{

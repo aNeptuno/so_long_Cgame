@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 14:21:29 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/07/02 03:05:02 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/07/02 17:24:08 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,18 @@ static void	move_player(int coord_x, int coord_y, t_game_data *gd)
 		if (c == 'C')
 			gd->player_items++;
 		if (c == 'E')
-		{
 			move_exit(gd);
-		}
+	}
+}
+
+void	update_animations(t_anim_data *anim_data)
+{
+	anim_data->frame_counter++;
+	if (anim_data->frame_counter >= anim_data->frame_delay)
+	{
+		anim_data->frame_counter = 0;
+		anim_data->current_frame = (anim_data->current_frame + 1)
+			% anim_data->frame_count;
 	}
 }
 
@@ -111,12 +120,13 @@ int	render_next_frame_loop(t_game_data *gd)
 		gd->update_counter = 0;
 		if (gd->move_up)
 			move_player(0, 1, gd);
-		if (gd->move_down)
+		else if (gd->move_down)
 			move_player(0, -1, gd);
-		if (gd->move_left)
+		else if (gd->move_left)
 			move_player(-1, 0, gd);
-		if (gd->move_right)
+		else if (gd->move_right)
 			move_player(1, 0, gd);
+		update_animations(gd->exit_anim_data);
 		if (gd->mlx && gd->window)
 		{
 			mlx_clear_window(gd->mlx, gd->window);

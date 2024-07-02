@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 01:53:27 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/07/02 01:56:57 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/07/02 17:00:38 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	close_window(t_game_data *gd)
 		mlx_destroy_display(gd->mlx);
 		gd->mlx = NULL;
 	}
+	//free_game_data(gd);
 	exit(EXIT_SUCCESS);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 18:47:35 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/23 14:43:48 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/07/02 17:11:39 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,4 +133,5 @@ void	init_sprites(t_game_data *gd)
 	init_walls_and_header(gd);
 	init_objects(gd);
 	init_sprites_player(gd);
+	load_animations(gd);
 }

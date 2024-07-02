@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 18:21:58 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/07/02 03:03:04 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/07/02 17:23:41 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,7 @@ static void	put_player(t_game_data *gd, int i, int j)
 static void	put_object_sprite(t_game_data *gd, char c, int i, int j)
 {
 	if (c == 'P')
-	{
 		put_player(gd, i, j);
-	}
 	else if (c == '1')
 	{
 		mlx_put_image_to_window(gd->mlx, gd->window,
@@ -43,8 +41,13 @@ static void	put_object_sprite(t_game_data *gd, char c, int i, int j)
 	}
 	else if (c == 'E')
 	{
-		mlx_put_image_to_window(gd->mlx, gd->window,
-			gd->sprites->exit, j * PIXELS, (i * PIXELS) + HEADER_HEIGHT);
+		if (gd->first_init)
+		{
+			mlx_put_image_to_window(gd->mlx, gd->window,
+				gd->sprites->exit, j * PIXELS, (i * PIXELS) + HEADER_HEIGHT);
+			gd->exit_anim_data->position_x = j * PIXELS;
+			gd->exit_anim_data->position_y = (i * PIXELS) + HEADER_HEIGHT;
+		}
 	}
 	else if (c == 'C')
 	{
@@ -91,6 +94,8 @@ void	put_map(t_game_data *gd)
 	draw_header(gd);
 	mlx_put_image_to_window(gd->mlx, gd->window, gd->sprites->bg_resized,
 		0, HEADER_HEIGHT);
+	if (!gd->first_init)
+		put_animations(gd);
 	i = 0;
 	while (i < gd->rows)
 	{
