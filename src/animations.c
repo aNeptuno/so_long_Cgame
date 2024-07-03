@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 17:11:15 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/07/02 17:31:57 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/07/03 14:03:42 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	load_animations(t_game_data *gd)
 {
 	char	i[1];
 	char	*path;
+	char	*tmp;
 	int		img_width;
 	int		img_height;
 
@@ -37,7 +38,8 @@ void	load_animations(t_game_data *gd)
 	i[0] = '0';
 	while (i[0] <= '5')
 	{
-		path = ft_strjoin(ft_strjoin("./assets/exit_anim/", i), ".xpm");
+		tmp = ft_strjoin("./assets/exit_anim/", i);
+		path = ft_strjoin(tmp, ".xpm");
 		gd->sprites->exit_anim_frames[i[0] - 48] = mlx_xpm_file_to_image(
 				gd->mlx, path, &img_width, &img_height);
 		if (gd->sprites->exit_anim_frames[i[0] - 48] == NULL)
@@ -46,8 +48,9 @@ void	load_animations(t_game_data *gd)
 			exit(EXIT_FAILURE);
 		}
 		i[0]++;
+		free(path);
+		free(tmp);
 	}
-	free(path);
 }
 
 void	put_animations(t_game_data *gd)

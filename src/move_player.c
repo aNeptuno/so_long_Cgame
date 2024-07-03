@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 14:21:29 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/07/02 17:24:08 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/07/03 18:04:17 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ static void	move_exit(t_game_data *gd)
 		ft_putstr("\nYou won! :D\n");
 		display_stats(gd, 0);
 		ft_putstr("\033[0m\n");
+		gd->win = 1;
 	}
 	else
 	{
@@ -98,6 +99,8 @@ static void	move_player(int coord_x, int coord_y, t_game_data *gd)
 			gd->player_items++;
 		if (c == 'E')
 			move_exit(gd);
+		if (c == 'M')
+			touch_enemy(gd);
 	}
 }
 
@@ -132,6 +135,9 @@ int	render_next_frame_loop(t_game_data *gd)
 			mlx_clear_window(gd->mlx, gd->window);
 			put_map(gd);
 		}
+		move_enemies(gd);
 	}
+	else if (gd->game_ended)
+		draw_end_img(gd);
 	return (0);
 }

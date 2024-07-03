@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 13:51:12 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/06/25 15:08:15 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/07/03 13:47:31 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static int	is_char_of_map(char c)
 	int	is_char;
 
 	is_char = (c == 'C' || c == 'P' || c == 'E' || c == '\n');
-	return (c == '1' || c == '0' || is_char);
+	return (c == '1' || c == '0' || is_char || c == 'M');
 }
 
 static int	char_count(char charToCount, char *file)

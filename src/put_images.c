@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/17 18:21:58 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/07/02 17:23:41 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/07/03 14:43:29 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,12 @@ static void	put_object_sprite(t_game_data *gd, char c, int i, int j)
 		mlx_put_image_to_window(gd->mlx, gd->window,
 			gd->sprites->obstacle, j * PIXELS, (i * PIXELS) + HEADER_HEIGHT);
 	}
-	else if (c == 'E')
+	else if (c == 'E' && gd->first_init)
 	{
-		if (gd->first_init)
-		{
-			mlx_put_image_to_window(gd->mlx, gd->window,
-				gd->sprites->exit, j * PIXELS, (i * PIXELS) + HEADER_HEIGHT);
-			gd->exit_anim_data->position_x = j * PIXELS;
-			gd->exit_anim_data->position_y = (i * PIXELS) + HEADER_HEIGHT;
-		}
+		mlx_put_image_to_window(gd->mlx, gd->window,
+			gd->sprites->exit, j * PIXELS, (i * PIXELS) + HEADER_HEIGHT);
+		gd->exit_anim_data->position_x = j * PIXELS;
+		gd->exit_anim_data->position_y = (i * PIXELS) + HEADER_HEIGHT;
 	}
 	else if (c == 'C')
 	{
@@ -56,6 +53,8 @@ static void	put_object_sprite(t_game_data *gd, char c, int i, int j)
 		if (gd->first_init)
 			gd->map_items++;
 	}
+	else if (c == 'M')
+		put_enemy(gd, i, j);
 }
 
 static void	ft_mlx_string(t_game_data *gd, int x, int y, char *title)

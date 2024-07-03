@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/14 13:24:42 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/07/02 17:21:55 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/07/03 18:37:08 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # define PIXELS 32
 # define HEADER_HEIGHT 50
 # define UPDATE_FREQ 3500
+# define ENEMY_FREQ 10000
 
 typedef struct s_point
 {
@@ -61,6 +62,10 @@ typedef struct s_sprites
 {
 	void	*bg;
 	void	*bg_resized;
+	void	*lost;
+	void	*lost_resized;
+	void	*win;
+	void	*win_resized;
 	void	*player_up;
 	void	*player_left;
 	void	*player_right;
@@ -68,10 +73,17 @@ typedef struct s_sprites
 	void	*obstacle;
 	void	*collectable;
 	void	*exit;
-	void	*enemy;
 	void	*header;
 	void	*exit_anim_frames[6];
-}				t_sprites;
+	void	*enemy;
+}		t_sprites;
+
+/// @brief Structure for enemy data
+typedef struct s_enemy
+{
+	t_point	*position;
+	int		move_direction;
+}	t_enemy;
 
 /// @brief Structure for saving game data
 /**
@@ -126,6 +138,11 @@ typedef struct s_game_data
 	int			update_counter;
 	int			game_ended;
 	t_anim_data	*exit_anim_data;
+	t_enemy		*enemies;
+	int			num_enemies;
+	int			enemy_index;
+	int			enemy_move_counter;
+	int			win;
 }	t_game_data;
 
 // Libft functions
@@ -140,8 +157,10 @@ char	*ft_strjoin(char const *s1, char const *s2);
 
 // Game initialization and data cleaning
 void	get_map(t_game_data *game_data, char *file_content);
-void	resize_image(t_game_data *gd, int original_width, int original_height);
+void	resize_bg_image(t_game_data *gd, int original_width, int original_height);
+void	resize_end_img(t_game_data *gd, int original_width, int original_height, int win);
 void	init_sprites(t_game_data *game_data);
+void	init_enemies(t_game_data *gd);
 void	error_and_free(t_game_data *game_data, char *msg);
 void	free_game_data(t_game_data *game_data);
 void	load_animations(t_game_data *gd);
@@ -155,13 +174,19 @@ void	validate_map(t_game_data *game_data);
 void	map_error(t_game_data *gd, char *msg);
 
 // Mlx hooks
-int	close_window(t_game_data *gd);
-int	key_press(int keycode, t_game_data *gd);
-int	key_release(int keycode, t_game_data *gd);
+int		close_window(t_game_data *gd);
+int		key_press(int keycode, t_game_data *gd);
+int		key_release(int keycode, t_game_data *gd);
 
 // Sprites rendering and character movement
 void	put_map(t_game_data *gd);
+void	put_enemy(t_game_data *gd, int i, int j);
 void	put_animations(t_game_data *gd);
 int		render_next_frame_loop(t_game_data *gd);
+void	draw_end_img(t_game_data *gd);
+
+// Enemies
+void	move_enemies(t_game_data *gd);
+void	touch_enemy(t_game_data *gd);
 
 #endif

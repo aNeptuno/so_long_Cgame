@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 19:32:07 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/07/02 03:05:36 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/07/03 17:58:27 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ static void	init_game(t_game_data *gd)
 	gd->game_ended = 0;
 	gd->player = malloc(sizeof(t_point));
 	gd->first_init = 1;
+	gd->win = 0;
+	init_enemies(gd);
 	init_sprites(gd);
 	put_map(gd);
 }

@@ -6,7 +6,7 @@
 /*   By: adiban-i <adiban-i@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 02:54:40 by adiban-i          #+#    #+#             */
-/*   Updated: 2024/07/02 17:21:00 by adiban-i         ###   ########.fr       */
+/*   Updated: 2024/07/03 18:34:43 by adiban-i         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,12 @@ void	free_game_data(t_game_data *game_data)
 		free(game_data->player);
 	if (game_data->exit_anim_data)
 		free(game_data->exit_anim_data);
+}
+
+void	draw_end_img(t_game_data *gd)
+{
+	if (gd->win)
+		mlx_put_image_to_window(gd->mlx, gd->window, gd->sprites->win_resized, 0, HEADER_HEIGHT);
+	else
+		mlx_put_image_to_window(gd->mlx, gd->window, gd->sprites->lost_resized, 0, HEADER_HEIGHT);
 }
